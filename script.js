@@ -1,32 +1,23 @@
 let playerScore = 0;
 let computerScore = 0;
-const selection = ['rock','paper','scissors'];
 
-function computerPlay(){
-  let computerSelection;
-  return computerSelection = selection[Math.floor((Math.random()*2)+0.5)];
-  //console.log(selection[Math.floor((Math.random()*2)+0.5)]);
+function game(){
 }
 
-function playerPlay(){ 
-  let playerSelection = prompt("Choose between rock, paper or scissors").toLowerCase();
-  
-  if (selection.includes(playerSelection)){
-    return playerSelection;
-  }
-
-  else{
-    alert('You have to choose between rock, paper or scissors');
-    playerPlay();
-  }
+function computerPlay(selection){
+  return selection[Math.floor((Math.random()*2)+0.5)];
 }
 
-//comparison function to declare winner of the round
+function comparePlay(playerSelection, computerSelection){
 
-function comparePlay(){
   if (playerSelection === computerSelection){
     alert("Its a tie");
-  } else if (playerSelection === 'rock' && computerSelection === 'scissors'){
+    return{
+      playerScore, computerScore
+    }
+  } 
+  
+  if (playerSelection === 'rock' && computerSelection === 'scissors'){
     alert('Rock beats Scissors! Player wins this round')
     playerScore++;
   } else if (playerSelection === 'scissors' && computerSelection === 'paper'){
@@ -45,41 +36,48 @@ function comparePlay(){
     alert('Scissors cuts Paper! Computer wins this round')
     computerScore++;
   }
-}
 
-function checkScore(){
-  if (playerScore === 3 || playerScore === 5 ){
-    alert('Congrats! You won the game!');
-    fail;
-    //break;
-  } else if (computerScore === 3 || computerScore === 5){
-    alert('Sorry :( ! Computer won the game!');
-    fail;
-  } else{
-    return;
+  return{
+    playerScore, computerScore
   }
 }
 
-function showScore(){
-  alert(`Player is ${playerScore} and Computer is ${computerScore}`);
-};
+function checkScore(scores){
 
-function playRound(){
-  playerSelection = playerPlay();
-  computerSelection = computerPlay();
-  
-  comparePlay();
-  showScore();
-  checkScore();
+  if (scores.playerScore === 3 || scores.playerScore === 5 ){
+    alert('Congrats! You won the game!');
+  };
+  if (scores.computerScore === 3 || scores.computerScore === 5){
+    alert('Sorry :( ! Computer won the game!');
+  };
 }
 
-function game(){
-  
-  alert("Welcome to this amazing game! Now you'll probably remember how is to suffer in a simple game like this one!");
+function showScore(scores){
+  alert(`Player is ${scores.playerScore} and Computer is ${scores.computerScore}`);
+};
+
+//main function
+function playRound(playerSelection){
+  const selection = ['rock','paper','scissors'];
+  if (selection.includes(playerSelection)){
+    computerSelection = computerPlay(selection);
+    const scores = comparePlay(playerSelection, computerSelection);
+    showScore(scores);
+    checkScore(scores);
+    //game(scores);
+  }
+  else{
+    return alert('You have to choose between rock, paper or scissors');
+  }
+}
+
+  /* function game(playerSelection){
+
+  playRound(playerSelection,playerScore,computerScore);
+
   //A 5 round game
-  for(let i = 1; i < 5; i++){
+for(let i = 1; i < 5; i++){
     alert(`The round ${i} starts now!`);
-    playRound();
   }
   if (playerScore > computerScore){
     alert("Player wins!");
@@ -88,6 +86,20 @@ function game(){
   } else{
     alert("It's a Tie!")
   }
-}
 
-game();
+}
+  */
+
+/* The Beginning */
+const startGame = document.querySelector('#game');
+startGame.onclick = () => game();
+
+//.forEach method to iterate through each button
+const buttons = document.querySelectorAll('#choices > button');
+
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    //alert(button.id);
+    playRound(button.id)
+  });
+});
